@@ -101,4 +101,44 @@ def show_simulation(
             x=alt.X("times", bin=alt.Bin(maxbins=50)),
             y="count()",
         )
+        .interactive()
+    )
+
+
+def show_failure_rates():
+    failure_rate = np.linspace(start=0.1, stop=0.9, num=20, endpoint=True)
+    confidence_level = np.array([0.7, 0.8, 0.9, 0.95, 0.99])
+    np.set_printoptions(precision=5, suppress=False, linewidth=200)
+
+    array = np.log(
+        np.broadcast_to(
+            (1 - confidence_level)[:, np.newaxis],
+            (len(confidence_level), len(failure_rate)),
+        )
+    ) / np.log(
+        np.broadcast_to(
+            failure_rate[np.newaxis, :], (len(confidence_level), len(failure_rate))
+        )
+    )
+    # Flatten to DataFrame
+    df = pl.DataFrame(
+        [
+            {"failure_rate": fr, "confidence_level": cl, "value": val}
+            for cl, row in zip(confidence_level, array)  # pyright: ignore[reportAny]
+            for fr, val in zip(failure_rate, row)  # pyright: ignore[reportAny]
+        ]
+    )
+
+    # Altair chart
+    display(  # noqa: F821 # pyright: ignore[reportUndefinedVariable]
+        alt.Chart(df)  # pyright: ignore[reportUnknownMemberType]
+        .mark_line(point=True)
+        .encode(
+            x=alt.X("failure_rate:Q", title="Failure Rate"),
+            y=alt.Y("value:Q", title="Value"),
+            color=alt.Color("confidence_level:N", title="Confidence Level"),
+            tooltip=["failure_rate", "confidence_level", "value"],
+        )
+        .properties(width=600, height=400, title="Confidence Level vs Failure Rate")
+        .interactive()
     )
