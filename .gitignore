@@ -1,0 +1,34 @@
+**/.ruff_cache
+**/.venv
+**/.vscode
+**/.mypy_cache
+**/.pytest_cache
+**/.coverage
+**/.hypothesis
+**/.tox
+**/.ipynb_checkpoints
+**/.DS_Store
+**/node_modules
+**/dist
+**/build
+**/coverage.xml
+**/coverage_html_report
+**/coverage.json
+
+# Python specific ignores
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+# Jupyter Notebook specific ignores
+**/*.ipynb_checkpoints
+# Pytest specific ignores
+**/.pytest_cache
+# MyPy specific ignores
+**/.mypy_cache
+# Ruff specific ignores
+**/.ruff_cache
+# Virtual environment specific ignores
+**/.venv
+# VSCode specific ignores
+**/.vscode
